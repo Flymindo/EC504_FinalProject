@@ -3,6 +3,7 @@ import cv2 as cv
 from matplotlib import pyplot as plt
 
 img = cv.imread('images/coins.jpg')
+copy = np.copy(img)
 gray = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
 ret, thresh = cv.threshold(gray,0,255,cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
 
@@ -10,8 +11,8 @@ ret, thresh = cv.threshold(gray,0,255,cv.THRESH_BINARY_INV+cv.THRESH_OTSU)
 kernel = np.ones((3,3),np.uint8)
 opening = cv.morphologyEx(thresh,cv.MORPH_CLOSE,kernel, iterations = 5)
 opening = cv.morphologyEx(opening,cv.MORPH_OPEN,kernel, iterations = 2)
-# sure background area
 
+# sure background area
 sure_bg = cv.dilate(opening,kernel,iterations=1)
 # Finding sure foreground area
 dist_transform = cv.distanceTransform(opening,cv.DIST_L2,5)
@@ -28,12 +29,13 @@ markers = markers+1
 markers[unknown==255] = 0
 
 markers = cv.watershed(img,markers)
-print(markers.shape)
 img[markers == -1] = [255,0,0]
 
 cv.imwrite("images/coins_watershed_segmented.png",
     cv.normalize(markers, None, 0, 255, cv.NORM_MINMAX))
 cv.imwrite("images/coins_watershed_contours.png", img)
+
+cv.imwrite("images/coins_contours.png", copy)
 
 plt.imshow(img)
 plt.show()
