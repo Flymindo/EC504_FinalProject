@@ -23,6 +23,7 @@ retval, labels, centers = cv2.kmeans(pixel_vals, k, None, criteria, 10, cv2.KMEA
 
 centers = np.uint8(centers)
 segmented_data = centers[labels.flatten()]
+
  
 
 segmented_image = segmented_data.reshape((image.shape))
