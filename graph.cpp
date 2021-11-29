@@ -4,8 +4,7 @@
 using namespace std;
 
 
-float Na,Nm,Or;
-int maxnodes = 200000;
+#define maxnodes 200000
 
 struct node{
    struct arc *first; /* first arc in linked list */
@@ -14,33 +13,55 @@ struct node{
    int Q;  /* Position of node in heap, from 1 to Nm, where 1 is best */
    };
 
-struct node Nodes[maxnodes];
 
-int height = 240;
-int width = 180;
+int height;
+int width;
 
 
 int main(int argc, char *argv[]){
-//    int V;
-//    int E;
-////    char *infile;
-//    FILE *fp1,*fpout;
     
     ifstream inFile;
     float data;
-    int count = 1;
+    
+    
+    inFile.open("imageSize.txt");
+    inFile>> height;
+    inFile>> width;
+    inFile.close();
+    
+    
+    
+    struct node Graph[height][width];
+    int count_col=0;
+    int count_row=0;
     
     inFile.open("image.txt");
     
     while(inFile >> data){
-        Nodes[count].
+        Graph[count_row][count_col].first = NULL;
+        Graph[count_row][count_col].D = count_row;
+        Graph[count_row][count_col].P = count_col;
+        Graph[count_row][count_col].Q = 0;
         
-        count++;
+        count_col++;
+//        cout << count_row << endl;
+        
+        if (count_col == width){
+            count_col = 0;
+            count_row +=1;
+        }
+    
         
     }
-    cout << count << endl;
-    
     inFile.close();
     
+    
+    cout << Graph[2][55].D << "    " << Graph[2][55].P << endl;
+    cout << Graph[23][10].D << "   "  << Graph[23][10].P << endl;
+    cout << Graph[239][179].D << "   "  << Graph[239][179].P << endl;
+    
+    
+
+  
 
 }
