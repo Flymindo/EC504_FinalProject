@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
     ifstream inFile;
     double data;
     struct arc *edge, test;
-    struct node s,t;
+    struct node src,term;
     
     int height;
     int width;
@@ -48,9 +48,10 @@ int main(int argc, char *argv[]){
     
     
     
-    struct node Graph[height][width];
+    struct node Graph[height+1][width+1];
     int count_col=0;
     int count_row=0;
+    
     
     inFile.open("image.txt");
     
@@ -105,31 +106,49 @@ int main(int argc, char *argv[]){
         }
     }
     
-    while(Graph[1][1].first){
-        cout << Graph[1][1].first->end[0] << "   ";
-        cout << Graph[1][1].first->end[1] << "   " << Graph[1][1].first->capacity << endl;
-        Graph[1][1].first = Graph[1][1].first->next;
-    }
+//    while(Graph[1][1].first){
+//        cout << Graph[1][1].first->end[0] << "   ";
+//        cout << Graph[1][1].first->end[1] << "   " << Graph[1][1].first->capacity << endl;
+//        Graph[1][1].first = Graph[1][1].first->next;
+//    }
     
-//    inFile.open("foreground.txt");
-//    // 0 => foreground
-//    count_col=0;
-//    count_row=0;
-//    while(inFile >> data){
-//        edge = (struct arc *)malloc(sizeof(test));
-//        edge->capacity = data; edge->end = 0;
-//        edge->next = Graph[count_row][count_col].first;
-//        Graph[count_row][count_col].first=edge;
-//
-//        count_col++;
-//        if (count_col == width){
-//            count_col = 0;
-//            count_row +=1;
+    inFile.open("foreground.txt");
+
+    for (int i=0; i< height; i++){
+        for (int j=0; j<width; j++){
+            inFile >> data;
+            edge = (struct arc *)malloc(sizeof(test));
+            edge->capacity = data; edge->end[0] =i; edge->end[1] = j;
+            edge->next = src.first;
+            src.first=edge;
+            
+        }
+    }
+    inFile.close();
+    
+    inFile.open("background.txt");
+    
+    //Graph[height][width] == Term
+    for (int i=0; i< height; i++){
+        for (int j=0; j<width; j++){
+            inFile >> data;
+            edge = (struct arc *)malloc(sizeof(test));
+            edge->capacity = data; edge->end[0] = height; edge->end[1] = width;
+            edge->next = Graph[i][j].first;
+            Graph[i][j].first=edge;
+            
+        }
+    }
+    inFile.close();
+    
+//    for (int i=0; i< height; i++){
+//        for (int j=0; j<width; j++){
+//            cout << Graph[i][j].first->end[0] << "    " << Graph[i][j].first->end[1] << endl;
 //        }
 //    }
-//    cout << Graph[0][1].first->capacity << endl;
-//
-//    inFile.close();
+
+
+    
     
     
 
