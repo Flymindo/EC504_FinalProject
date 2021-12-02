@@ -1,6 +1,8 @@
 // The contents of this file are in the public domain. See LICENSE_FOR_EXAMPLE_PROGRAMS.txt
+// edited by dpe22 for EC504 final project
 /*
-
+    see http://dlib.net/compile.html for instructions to compile DLIB on your machine to run this code
+    
     This is an example illustrating the use of the GUI API as well as some
     aspects of image manipulation from the dlib C++ Library.
 
