@@ -1,6 +1,7 @@
 #include "graph.h" 
 #include <vector>
 #include <cmath>
+#include <fstream>
 
 #define SQUARE(X) X*X
 #define SIGMA 30
@@ -10,6 +11,16 @@
 #define SINK -1 
 
 using namespace std;
+
+void matrix2file(vector<vector<double>> graph, const char* fname) {
+    ofstream f(fname);
+    for (int i=0; i<graph.size(); i++) {
+        for (int j=0; j<graph[0].size(); j++) {
+            f << graph[i][j] << " ";
+        }
+        f << "\n";
+    }
+}
 
 double penalty(double a, double b) {
     return 100 * exp(-SQUARE((int)a - (int)b)) / (2 * SQUARE(SIGMA)); 
