@@ -13,7 +13,10 @@ using namespace std;
 struct node{
     struct arc *first; /* first arc in linked list */
     int flow;  /* Distance estimate */
-    int P[2];  /* Predecessor node in shortest path */
+//    struct node *P;  /* Predecessor node in shortest path */
+    int curr[2];
+    int prev[2];  /* Predecessor node in shortest path */
+    struct arc *wentThrough;
     double pixel;  /* Position of node in heap, from 1 to Nm, where 1 is best */
 };
 
@@ -27,10 +30,13 @@ struct arc{
 int height;
 int width;
 
-vector< vector<node> > Graph;
+//vector< vector<node> > Graph;
+struct node Graph[10000][10000];
 
 
 int penalty(double a, double b);
+int bfs(node src,node Graph[][10000]);
+int edmondsKarp(node sNode,node Graph[][10000]);
 
 
 int main(int argc, char *argv[]){
@@ -40,11 +46,6 @@ int main(int argc, char *argv[]){
     double data;
     struct arc *edgeTo, *edgeFrom, test;
     struct node src,term;
-    src.first = NULL;
-
-//    int height;
-//    int width;
-
 
 
     inFile.open("imageSize.txt");
@@ -52,33 +53,45 @@ int main(int argc, char *argv[]){
     inFile>> width;
     inFile.close();
 
-    int size = height*width;
+//    int size = height*width;
 
 
-//    struct node Graph[height][width];
-    int count_col=0;
-    int count_row=0;
-
+//    struct node Graph[height+1][width+1];
 
     inFile.open("image.txt");
-
-    while(inFile >> data){
-        Graph[count_row][count_col].first = NULL;
-        Graph[count_row][count_col].flow = 0;
-        Graph[count_row][count_col].P[0] = -1;
-        Graph[count_row][count_col].P[1] = -1;
-        Graph[count_row][count_col].pixel = data;
-
-        count_col++;
-        if (count_col == width){
-            count_col = 0;
-            count_row +=1;
+    
+    for (int i=0; i< height; i++){
+        for (int j=0; j<width; j++){
+            Graph[i][j].first = NULL;
+            Graph[i][j].wentThrough = NULL;
+            Graph[i][j].flow = 0;
+            Graph[i][j].prev[0] = -1;
+            Graph[i][j].prev[1] = -1;
+            Graph[i][j].curr[0] = i;
+            Graph[i][j].curr[1] = j;
+            Graph[i][j].pixel = data;
         }
-
-
     }
     inFile.close();
     
+    
+    //Terminal
+    Graph[height][width].first = NULL;
+    Graph[height][width].wentThrough = NULL;
+    Graph[height][width].flow = 0;
+    Graph[height][width].prev[0] = -1;
+    Graph[height][width].prev[1] = -1;
+    Graph[height][width].curr[0] = height;
+    Graph[height][width].curr[1] = width;
+    Graph[height][width].pixel = 0;
+    //Source
+    src.first = NULL;
+    src.wentThrough = NULL;
+    src.curr[0] = height-1;
+    src.curr[1] = width;
+    src.prev[0] = height-1;
+    src.prev[1] = width;
+    Graph[height-1][width] = src;
     
 
 
@@ -92,6 +105,7 @@ int main(int argc, char *argv[]){
                 edgeTo->capacity = bp; edgeTo->end[0]= i-1; edgeTo->end[1] = j;
                 edgeTo->next = Graph[i][j].first;
                 Graph[i][j].first=edgeTo;
+                
                 edgeFrom = (struct arc *)malloc(sizeof(test));
                 edgeFrom->capacity = bp; edgeFrom->end[0]= i; edgeFrom->end[1] = j;
                 edgeFrom->next = Graph[i-1][j].first;
@@ -99,19 +113,13 @@ int main(int argc, char *argv[]){
                 edgeTo->neigh = edgeFrom;
                 edgeFrom->neigh = edgeTo;
             }
-//            if (i+1 < height){
-//                bp = penalty(Graph[i][j].pixel, Graph[i+1][j].pixel);
-//                edge = (struct arc *)malloc(sizeof(test));
-//                edge->capacity = bp; edge->end[0] = i+1; edge->end[1] = j;
-//                edge->next = Graph[i][j].first;
-//                Graph[i][j].first=edge;
-//            }
             if (j-1 >= 0){
                 bp = penalty(Graph[i][j].pixel, Graph[i][j-1].pixel);
                 edgeTo = (struct arc *)malloc(sizeof(test));
                 edgeTo->capacity = bp; edgeTo->end[0]= i; edgeTo->end[1] = j-1;
                 edgeTo->next = Graph[i][j].first;
                 Graph[i][j].first=edgeTo;
+                
                 edgeFrom = (struct arc *)malloc(sizeof(test));
                 edgeFrom->capacity = bp; edgeFrom->end[0]= i; edgeFrom->end[1] = j;
                 edgeFrom->next = Graph[i][j-1].first;
@@ -119,38 +127,9 @@ int main(int argc, char *argv[]){
                 edgeTo->neigh = edgeFrom;
                 edgeFrom->neigh = edgeTo;
             }
-//            if (j+1 < width){
-//                bp = penalty(Graph[i][j].pixel, Graph[i][j+1].pixel);
-//                edge = (struct arc *)malloc(sizeof(test));
-//                edge->capacity = bp; edge->end[0] = i; edge->end[1] = j+1;
-//                edge->next = Graph[i][j].first; edge->neigh = Graph[i-1][j];
-//                Graph[i][j].first=edge;
-//            }
+
         }
     }
-    
-    
-//    inFile.open("segmented.txt");
-//    for (int i=0; i< height; i++){
-//        for (int j=0; j<width; j++){
-//            inFile >> data;
-//            edgeTo = (struct arc *)malloc(sizeof(test));
-//            edgeTo->capacity = (int)data;
-//            if (data == 0){
-//                edgeTo->end[0] = -1; edgeTo->end[1] = -1;
-//                edgeTo->next = Graph[i][j].first;
-//                Graph[i][j].first=edgeTo;
-//            }
-//            else{
-//                edgeTo->capacity = (int) data; edgeTo->end[0] =i; edgeTo->end[1] = j;
-//                edgeTo->next = src.first;
-//                src.first=edgeTo;
-//            }
-//
-//        }
-//    }
-//    inFile.close();
-
     
 
     inFile.open("foreground.txt");
@@ -159,134 +138,174 @@ int main(int argc, char *argv[]){
         for (int j=0; j<width; j++){
             inFile >> data;
             edgeTo = (struct arc *)malloc(sizeof(test));
-            edgeTo->capacity = (int) 100* data; edgeTo->end[0] =i; edgeTo->end[1] = j;
+            edgeTo->capacity = (int) 10* data; edgeTo->end[0] =i; edgeTo->end[1] = j;
             edgeTo->neigh = NULL;
-            edgeTo->next = src.first;
-            src.first=edgeTo;
-
+            edgeTo->next = Graph[height-1][width].first;
+            Graph[height-1][width].first=edgeTo;
+            
+            edgeFrom = (struct arc *)malloc(sizeof(test));
+            edgeFrom->capacity = 0; edgeFrom->end[0]= height-1; edgeFrom->end[1] = width;
+            edgeFrom->next = Graph[i][j].first;
+            Graph[i][j].first = edgeFrom;
+            edgeTo->neigh = edgeFrom;
+            edgeFrom->neigh = edgeTo;
         }
     }
     inFile.close();
 
     inFile.open("background.txt");
-//
+    
+    int count=0;
 //    //end[] = [-1,-1] == sink
     for (int i=0; i< height; i++){
         for (int j=0; j<width; j++){
             inFile >> data;
             edgeTo = (struct arc *)malloc(sizeof(test));
-            edgeTo->capacity = (int) 100 * data; edgeTo->end[0] = -1; edgeTo->end[1] = -1;
+            edgeTo->capacity = (int) 10 * data; edgeTo->end[0] = height; edgeTo->end[1] = width;
             edgeTo->next = Graph[i][j].first;
             Graph[i][j].first=edgeTo;
+            
+            edgeFrom = (struct arc *)malloc(sizeof(test));
+            edgeFrom->capacity = 0; edgeFrom->end[0]= height; edgeFrom->end[1] = width;
+            edgeFrom->next = Graph[i][j].first;
+            Graph[i][j].first = edgeFrom;
+            edgeTo->neigh = edgeFrom;
+            edgeFrom->neigh = edgeTo;
+            
+            count += (int) 100 * data;
 
         }
     }
     inFile.close();
+    cout << count << endl;
     
-//
-//    for (int i=0; i< height; i++){
-//        for (int j=0; j<width; j++){
-//            while(Graph[i][j].first){
-////                cout << Graph[i][j].first->end[0] << "   ";
-////                cout << Graph[i][j].first->end[1] << "   " << Graph[i][j].first->capacity << "  " << Graph[i][j].first->neigh->end[0] << "    " << Graph[i][j].first->neigh->end[1] << endl;
-//                cout << Graph[i][j].first->end[0] << "   ";
-//                cout << Graph[i][j].first->end[1] << "   " << Graph[i][j].first->capacity << "  " << endl;
-//                Graph[i][j].first = Graph[i][j].first->next;
-//            }
-//
-//        }
+//    while(src.first){
+//        cout << src.first->end[0] << "  "<< src.first->end[1] << "   " << src.first->capacity << endl;
+//        src.first = src.first->next;
 //    }
-    
-    while(src.first){
-        cout << src.first->end[0] << "  "<< src.first->end[1] << "   " << src.first->capacity << endl;
-        src.first = src.first->next;
-    }
 
     // From Here, Min Cut Goes in
+    cout << edmondsKarp(src,Graph) << endl;
+//    cout << bfs(src,Graph) << endl;
+ 
     
+    return 0;
 }
 
 
-int bfs(node sNode)
+int bfs(node sNode,node Graph[][10000])
 {
 //   memset(parList, -1, sizeof(parList));
 //   memset(currentPathC, 0, sizeof(currentPathC));
     queue<node> q;//declare queue vector
-    q.push(sNode);
-//   parList[sNode] = -1;//initialize parlist’s source node
-//   currentPathC[sNode] = 999;//initialize currentpath’s source node
+    q.push(Graph[height-1][width]);
+
     
+    for (int i=0; i< height; i++){
+        for (int j=0; j<width; j++){
+            Graph[i][j].wentThrough = NULL;
+            Graph[i][j].prev[0] = -1;
+            Graph[i][j].prev[1] = -1;
+            Graph[i][j].flow = 0;
+        }
+    }
+//    Graph[height-1][width].wentThrough = NULL;
+//    Graph[height-1][width].prev[0] = height-1;
+//    Graph[height-1][width].prev[1] = width;
+//    Graph[height-1][width].flow = 0;
+    
+    Graph[height][width].wentThrough = NULL;
+    Graph[height][width].prev[0] = -1;
+    Graph[height][width].prev[1] = -1;
+    Graph[height][width].flow = 0;
+
     int toGo[2];
     int flowPassed = 0;
     int C; //Capacity
     int maxFlow;
-    
+    arc* temp;
+
     while(!q.empty())// if q is not empty
     {
+//        cout << "I'm in" << endl;
         node currNode = q.front();
         q.pop();
+//        cout <<currNode.curr[0] << "   " << currNode.curr[1] << endl;
         
-        while(currNode.first){
-            toGo[0] = currNode.first->end[0];
-            toGo[1] = currNode.first->end[1];
-            C = currNode.first->capacity;
-            
-            if (Graph[toGo[0]][toGo[1]].P[0] != -1 && Graph[toGo[0]][toGo[1]].P[1] != -1){
-                if (C >0){
-                    Graph[toGo[0]][toGo[1]].P[0] = toGo[0];
-                    Graph[toGo[0]][toGo[1]].P[1] = toGo[1];
+        temp = currNode.first;
+//        cout << temp->capacity << endl;
+        while(temp){
+            toGo[0] = temp->end[0];
+            toGo[1] = temp->end[1];
+//            cout << toGo[0] << "   " << toGo[1] << endl;
+            C = temp->capacity;
+            if (C >0){
+                if ( Graph[toGo[0]][toGo[1]].prev[0] == -1 && Graph[toGo[0]][toGo[1]].prev[1] == -1){
+//                    cout << "I'm in" << endl;
+                    Graph[toGo[0]][toGo[1]].prev[0] =currNode.curr[0];
+                    Graph[toGo[0]][toGo[1]].prev[1] =currNode.curr[1];
+                    Graph[toGo[0]][toGo[1]].wentThrough = temp;
+                    
+//                        cout << Graph[toGo[0]][toGo[1]].wentThrough->capacity  << endl;
+                    
                     maxFlow = min(C, currNode.flow);
-                    if(toGo[0] == -1 && toGo[1] == -1){
+                    Graph[toGo[0]][toGo[1]].flow = maxFlow;
+//
+                    if(toGo[0] == height && toGo[1] == width){
+//                        cout <<currNode.curr[0] << "   " << currNode.curr[1] << endl;
+//                        cout << maxFlow << endl;
                         return maxFlow;
                     }
                     q.push(Graph[toGo[0]][toGo[1]]);
+
                 }
-                
             }
+            temp = temp->next;
         }
-       
-//        for(int i=0; i<g[currNode].size(); i++)
-//        {
-//         int to = g[currNode][i];
-//         if(parList[to] == -1)
-//         {
-//            if(c[currNode][to] - flowPassed[currNode][to] > 0)
-//            {
-//               parList[to] = currNode;
-//               currentPathC[to] = min(currentPathC[currNode],
-//               c[currNode][to] - flowPassed[currNode][to]);
-//               if(to == eNode)
-//               {
-//                  return currentPathC[eNode];
-//               }
-//               q.push(to);
-//            }
-//         }
-//        }
     }
     return 0;
 }
 
-//int edmondsKarp(int sNode, int eNode)
-//{
-//   int maxFlow = 0;
-//   while(true)
-//   {
-//      int flow = bfs(sNode, eNode);
-//      if (flow == 0)
-//      {
-//         break;
-//      }
-//      maxFlow += flow;
-//      int currNode = eNode;
-//      while(currNode != sNode)
-//      {
-//         int prevNode = parList[currNode];
-//         flowPassed[prevNode][currNode] += flow;
-//         flowPassed[currNode][prevNode] -= flow;
-//         currNode = prevNode;
-//      }
-//}
+int edmondsKarp(node sNode,node Graph[][10000])
+{
+    int maxFlow = 0;
+    int x;
+    int y;
+    int count;
+    while(true)
+    {
+        int flow = bfs(sNode,Graph);
+//        cout << flow << endl;
+        if (flow == 0)
+        {
+            break;
+        }
+        
+        maxFlow += flow;
+        cout << maxFlow << endl;
+
+        node temp = Graph[height][width];
+        
+
+        while(true)
+        {
+            x =temp.prev[0];
+            y =temp.prev[1];
+            
+            temp.wentThrough->capacity -= flow;
+            temp.wentThrough->neigh->capacity += flow;
+//            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->capacity <<endl;
+//            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->neigh->capacity <<endl;
+            if (x == height-1 && y == width){
+                
+                break;
+            }
+            temp = Graph[x][y];
+        }
+        
+    }
+    return maxFlow;
+}
 
 int penalty(double a, double b) {
 //    cout << 100 * exp(-SQUARE((double)a - (double)b)) / (2 * SQUARE(SIGMA)) << endl;
