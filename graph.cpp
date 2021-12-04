@@ -42,6 +42,7 @@ int edmondsKarp(node sNode,node Graph[][10000]);
 int main(int argc, char *argv[]){
 
     ifstream inFile;
+//    ofstream outFile;
     
     double data;
     struct arc *edgeTo, *edgeFrom, test;
@@ -183,12 +184,10 @@ int main(int argc, char *argv[]){
 
     // From Here, Min Cut Goes in
     cout << edmondsKarp(src,Graph) << endl;
+
     
-    while(Graph[height-1][width].first){
-        cout << Graph[height-1][width].first->end[0] << "  "<< Graph[height-1][width].first->end[1] << "   " << Graph[height-1][width].first->capacity << endl;
-        Graph[height-1][width].first = Graph[height-1][width].first->next;
-    }
-//    cout << bfs(src,Graph) << endl;
+    
+    
  
     
     return 0;
@@ -270,6 +269,8 @@ int bfs(node sNode,node Graph[][10000])
 
 int edmondsKarp(node sNode,node Graph[][10000])
 {
+    ofstream outFile;
+    
     int maxFlow = 0;
     int x;
     int y;
@@ -306,6 +307,24 @@ int edmondsKarp(node sNode,node Graph[][10000])
         }
         
     }
+    
+    outFile.open("result.txt");
+    
+    
+    for (int i=0; i<height;i++){
+        for (int j=0; j<width; j++){
+            if (Graph[i][j].prev[0] == -1 && Graph[i][j].prev[1] == -1){
+                outFile << 0 << " ";
+            }
+            else{
+                outFile << 1 << " ";
+            }
+
+        }
+        outFile << endl;
+    }
+    outFile.close();
+    
     return maxFlow;
 }
 
