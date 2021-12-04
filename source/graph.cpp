@@ -12,6 +12,12 @@
 
 using namespace std;
 
+typedef struct edge {
+    double weight;
+    int neighbor;
+    edge(double x, int y) {weight = x; neighbor = y;}
+} edge;
+
 void matrix2file(vector<vector<double>> graph, const char* fname) {
     ofstream f(fname);
     for (int i=0; i<graph.size(); i++) {
@@ -26,7 +32,7 @@ double penalty(double a, double b) {
     return 100 * exp(-SQUARE((int)a - (int)b)) / (2 * SQUARE(SIGMA)); 
 }
 
-double buildSpatialGraph(const vector<vector<double>>& image, vector<vector<double>>& graph) {
+double buildSpatialGraph(const vector<vector<double>>& image, vector<vector<edge>>& graph) {
     int rows = image.size();
     int cols = image[0].size();
     double x = 0;
@@ -40,6 +46,7 @@ double buildSpatialGraph(const vector<vector<double>>& image, vector<vector<doub
             if (i + 1 < rows) {
                 y = (i + 1) * cols + j;
                 bp = penalty(image[i][j], image[i + 1][j]);
+                // edge e(bp, )
                 graph[x][y] = graph[y][x] = bp;
                 K = max(K, bp);
             }
