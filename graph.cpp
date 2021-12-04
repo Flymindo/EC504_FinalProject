@@ -138,7 +138,7 @@ int main(int argc, char *argv[]){
         for (int j=0; j<width; j++){
             inFile >> data;
             edgeTo = (struct arc *)malloc(sizeof(test));
-            edgeTo->capacity = (int) 10* data; edgeTo->end[0] =i; edgeTo->end[1] = j;
+            edgeTo->capacity = (int) 100* data; edgeTo->end[0] =i; edgeTo->end[1] = j;
             edgeTo->neigh = NULL;
             edgeTo->next = Graph[height-1][width].first;
             Graph[height-1][width].first=edgeTo;
@@ -155,13 +155,13 @@ int main(int argc, char *argv[]){
 
     inFile.open("background.txt");
     
-    int count=0;
+//    int count=0;
 //    //end[] = [-1,-1] == sink
     for (int i=0; i< height; i++){
         for (int j=0; j<width; j++){
             inFile >> data;
             edgeTo = (struct arc *)malloc(sizeof(test));
-            edgeTo->capacity = (int) 10 * data; edgeTo->end[0] = height; edgeTo->end[1] = width;
+            edgeTo->capacity = (int) 100 * data; edgeTo->end[0] = height; edgeTo->end[1] = width;
             edgeTo->next = Graph[i][j].first;
             Graph[i][j].first=edgeTo;
             
@@ -172,20 +172,22 @@ int main(int argc, char *argv[]){
             edgeTo->neigh = edgeFrom;
             edgeFrom->neigh = edgeTo;
             
-            count += (int) 100 * data;
+//            count += (int) 100 * data;
 
         }
     }
     inFile.close();
-    cout << count << endl;
+//    cout << count << endl;
     
-//    while(src.first){
-//        cout << src.first->end[0] << "  "<< src.first->end[1] << "   " << src.first->capacity << endl;
-//        src.first = src.first->next;
-//    }
+
 
     // From Here, Min Cut Goes in
     cout << edmondsKarp(src,Graph) << endl;
+    
+    while(Graph[height-1][width].first){
+        cout << Graph[height-1][width].first->end[0] << "  "<< Graph[height-1][width].first->end[1] << "   " << Graph[height-1][width].first->capacity << endl;
+        Graph[height-1][width].first = Graph[height-1][width].first->next;
+    }
 //    cout << bfs(src,Graph) << endl;
  
     
@@ -282,7 +284,7 @@ int edmondsKarp(node sNode,node Graph[][10000])
         }
         
         maxFlow += flow;
-        cout << maxFlow << endl;
+//        cout << maxFlow << endl;
 
         node temp = Graph[height][width];
         
@@ -293,7 +295,7 @@ int edmondsKarp(node sNode,node Graph[][10000])
             y =temp.prev[1];
             
             temp.wentThrough->capacity -= flow;
-            temp.wentThrough->neigh->capacity += flow;
+//            temp.wentThrough->neigh->capacity -= flow;
 //            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->capacity <<endl;
 //            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->neigh->capacity <<endl;
             if (x == height-1 && y == width){
