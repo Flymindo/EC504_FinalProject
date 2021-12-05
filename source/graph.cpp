@@ -3,6 +3,7 @@
 #include <cmath>
 #include <vector>
 #include <queue>
+#include "graph.h"
 
 using namespace std;
 
