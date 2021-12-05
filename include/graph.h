@@ -1,6 +1,14 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+/* includes */
+
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <vector>
+#include <queue>
+
 /* namespace variables */
 
 using namespace std;
