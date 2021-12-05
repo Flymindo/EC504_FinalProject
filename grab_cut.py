@@ -23,16 +23,16 @@ def draw_circle(event,x,y,flags,param):
                 cv.circle(copied,(x,y),5,(255,255,255),-1)
                 cv.circle(mask,(x,y),5,(255,255,255),-1)
             else:
-                cv.circle(copied,(x,y),5,(125,125,125),-1)
-                cv.circle(mask,(x,y),5,(125,125,125),-1)
+                cv.circle(copied,(x,y),5,(0,0,0),-1)
+                cv.circle(mask,(x,y),5,(0,0,0),-1)
     elif event == cv.EVENT_LBUTTONUP:
         drawing = False
         if (mode == True):
             cv.circle(mask,(x,y),5,(255,255,255),-1)
             cv.circle(copied,(x,y),5,(255,255,255),-1)
         else:
-            cv.circle(copied,(x,y),5,(125,125,125),-1)
-            cv.circle(mask,(x,y),5,(125,125,125),-1)
+            cv.circle(copied,(x,y),5,(0,0,0),-1)
+            cv.circle(mask,(x,y),5,(0,0,0),-1)
 
 if __name__ == "__main__":
     args = parser() # get command line arguments
@@ -60,6 +60,8 @@ if __name__ == "__main__":
         if k == 27 or k == ord('q'):
             break
     cv.destroyAllWindows()
+
+    np.savetxt("marked.txt", mask)
 
     # mask[mask == 0] = 0
     # mask[mask == 255] = 1
