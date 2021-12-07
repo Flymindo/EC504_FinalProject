@@ -189,11 +189,13 @@ void Graph::relabel(int u) {
 
 int Graph::getMaxFlow(int s, int t) {
 	preflow(s);
-
+	int timer = 0;
 	// loop until no nodes overflow
 	while (overFlowNode(node) != -1) {
 		int u = overFlowNode(node);
 		if (!push(u)) relabel(u);
+		cout << timer << endl;
+		timer++;
 	}
 
 	// return the last node, whose e_flow will be the max flow of the graph
@@ -249,7 +251,7 @@ int main(int argc, char** argv) {
 		// number of pixels aka nodes aka vertices
 		int V = img.nr() * img.nc();
 		int capacity = 0;
-		int sigma = 100;
+		int sigma = 30;
 		int capacityBlue = 0;
 		int capacityRed = 0;
 		int capacityGreen = 0;
