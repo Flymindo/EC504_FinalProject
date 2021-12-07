@@ -256,7 +256,7 @@ int main(int argc, char** argv) {
 
 		// initialize a graph with V nodes + source and sink nodes
 		std::cout << "initializing graph" << endl;
-		Graph g(V+2);
+		Graph g(V);
 		std::cout << "graph initialized with " << V << " nodes, a source node (s), and a sink node (t)." << endl;
 
 		// This loop executes every time the user double clicks on some image pixel and it
@@ -273,6 +273,26 @@ int main(int argc, char** argv) {
 			if (counter == 2) break;
 		}
 
+		/*//add edge to source
+		capacityBlue = 100 * exp(-pow(img[i][j].blue - img[userInput[0].y()][userInput[0].x()].blue, 2) / (2 * pow(sigma, 2)));
+		capacityRed = 100 * exp(-pow(img[i][j].red - img[userInput[0].y()][userInput[0].x()].red, 2) / (2 * pow(sigma, 2)));
+		capacityGreen = 100 * exp(-pow(img[i][j].green - img[userInput[0].y()][userInput[0].x()].green, 2) / (2 * pow(sigma, 2)));
+		//cout << img[i][j].red - img[userInput[0].y()][userInput[0].x()].red << endl;
+		//cout << img[i][j].green - img[userInput[0].y()][userInput[0].x()].green << endl;
+		//cout << img[i][j].blue - img[userInput[0].y()][userInput[0].x()].blue << endl;
+		capacity = capacityRed + capacityGreen + capacityBlue;
+		//capacity = max(capacity, 0);
+		g.addEdge(V + 1, userInput[0].x() * img.nc() + userInput[0].y(), capacity);
+
+		//add edge to sink
+		capacityBlue = 100 * exp(-pow(img[i][j].blue - img[userInput[1].y()][userInput[1].x()].blue, 2) / (2 * pow(sigma, 2)));
+		capacityRed = 100 * exp(-pow(img[i][j].red - img[userInput[1].y()][userInput[1].x()].red, 2) / (2 * pow(sigma, 2)));
+		capacityGreen = 100 * exp(-pow(img[i][j].green - img[userInput[1].y()][userInput[1].x()].green, 2) / (2 * pow(sigma, 2)));
+		capacity = capacityRed + capacityGreen + capacityBlue;
+		capacity = max(capacity, 0);
+		g.addEdge(V + 2, userInput[1].x()*img.nc() + userInput[1].y(),  capacity);
+		//std::cout << "capacity from edge to sink at [" << i << "][" << j << "] = " << capacity << endl;
+		*/
 		// add edges
 		for (int i = 0; i < img.nr(); i++) {
 
@@ -283,26 +303,6 @@ int main(int argc, char** argv) {
 				//capacity = 100 * exp(-(img_gray[i][j] - img_gray[userInput[0].y()][userInput[0].x()]) ^ 2 / (2*sigma^2));
 				//capacity = max(capacity, 0);
 				//std::cout << "capacity from edge to source at [" << i << "][" << j << "] = " << capacity << endl;
-
-				//add edge to source
-				capacityBlue = 100 * exp(-pow(img[i][j].blue - img[userInput[0].y()][userInput[0].x()].blue, 2) / (2 * pow(sigma,2)));
-				capacityRed = 100 * exp(-pow(img[i][j].red - img[userInput[0].y()][userInput[0].x()].red, 2) / (2 * pow(sigma,2)));
-				capacityGreen = 100 * exp(-pow(img[i][j].green - img[userInput[0].y()][userInput[0].x()].green, 2) / (2 * pow(sigma,2)));
-				//cout << img[i][j].red - img[userInput[0].y()][userInput[0].x()].red << endl;
-				//cout << img[i][j].green - img[userInput[0].y()][userInput[0].x()].green << endl;
-				//cout << img[i][j].blue - img[userInput[0].y()][userInput[0].x()].blue << endl;
-				capacity = capacityRed + capacityGreen + capacityBlue;
-				//capacity = max(capacity, 0);
-				g.addEdge((i)*img.nc() + j, V + 1, capacity);
-				
-				//add edge to sink
-				capacityBlue = 100 * exp(-pow(img[i][j].blue - img[userInput[1].y()][userInput[1].x()].blue, 2) / (2 * pow(sigma,2)));
-				capacityRed = 100 * exp(-pow(img[i][j].red - img[userInput[1].y()][userInput[1].x()].red, 2) / (2 * pow(sigma,2)));
-				capacityGreen = 100 * exp(-pow(img[i][j].green - img[userInput[1].y()][userInput[1].x()].green, 2) / (2 * pow(sigma, 2)));
-				capacity = capacityRed + capacityGreen + capacityBlue;
-				capacity = max(capacity, 0);
-				g.addEdge((i) * img.nc() + j, V + 2, capacity);
-				//std::cout << "capacity from edge to sink at [" << i << "][" << j << "] = " << capacity << endl;
 				
 				//add edge right unless in the right-most column
 				if (j < img.nc() - 1) {
@@ -351,8 +351,8 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		int s = V + 1;
-		int t = V + 2;
+		int s = userInput[0].x() * img.nc() + userInput[0].y();
+		int t = userInput[1].x() * img.nc() + userInput[1].y();
 		std::cout << "Maximum flow is " << g.getMaxFlow(s, t);
 
 		// terminate the program when the user closes the image
