@@ -10,9 +10,6 @@ image = cv2.imread('images/coins.jpg')
 # Get rid of BGR to GRAY scale conversion if image scale is already in grayscale
 gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 
-plt.imshow(gray, interpolation='nearest')
-plt.show()
-
 np.savetxt('image.txt',gray )
 np.savetxt('imageSize.txt', gray.shape, fmt='%i')
 
@@ -41,7 +38,5 @@ background = background.reshape(height,width)
 
 np.savetxt('foreground.txt',foreground)
 np.savetxt('background.txt',background)
-
-
 
 
