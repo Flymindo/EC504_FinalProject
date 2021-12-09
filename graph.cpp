@@ -296,7 +296,7 @@ int edmondsKarp(node sNode,node Graph[][10000])
             y =temp.prev[1];
             
             temp.wentThrough->capacity -= flow;
-//            temp.wentThrough->neigh->capacity -= flow;
+            temp.wentThrough->neigh->capacity -= flow;
 //            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->capacity <<endl;
 //            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->neigh->capacity <<endl;
             if (x == height-1 && y == width){
@@ -307,6 +307,65 @@ int edmondsKarp(node sNode,node Graph[][10000])
         }
         
     }
+    
+    
+//
+//    queue<node> q;//declare queue vector
+//    q.push(Graph[height-1][width]);
+//
+//
+//    for (int i=0; i< height; i++){
+//        for (int j=0; j<width; j++){
+//            Graph[i][j].wentThrough = NULL;
+//            Graph[i][j].prev[0] = -1;
+//            Graph[i][j].prev[1] = -1;
+//            Graph[i][j].flow = 0;
+//        }
+//    }
+//
+//    Graph[height][width].wentThrough = NULL;
+//    Graph[height][width].prev[0] = -1;
+//    Graph[height][width].prev[1] = -1;
+//    Graph[height][width].flow = 0;
+//
+//    int toGo[2];
+//    arc* temp;
+//
+//    while(!q.empty())// if q is not empty
+//    {
+////        cout << "I'm in" << endl;
+//        node currNode = q.front();
+//        q.pop();
+////        cout <<currNode.curr[0] << "   " << currNode.curr[1] << endl;
+//
+//        temp = currNode.first;
+////        cout << temp->capacity << endl;
+//        while(temp){
+//            toGo[0] = temp->end[0];
+//            toGo[1] = temp->end[1];
+////            cout << toGo[0] << "   " << toGo[1] << endl;
+//            if ( Graph[toGo[0]][toGo[1]].prev[0] == -1 && Graph[toGo[0]][toGo[1]].prev[1] == -1){
+////                    cout << "I'm in" << endl;
+//                Graph[toGo[0]][toGo[1]].prev[0] =currNode.curr[0];
+//                Graph[toGo[0]][toGo[1]].prev[1] =currNode.curr[1];
+//                Graph[toGo[0]][toGo[1]].wentThrough = temp;
+//
+//
+//                if(toGo[0] == height && toGo[1] == width){
+//                    continue;
+//                }
+//                q.push(Graph[toGo[0]][toGo[1]]);
+//
+//            }
+//            temp = temp->next;
+//        }
+//    }
+    
+    
+    
+    
+    
+    
     
     outFile.open("result.txt");
     
@@ -331,6 +390,7 @@ int edmondsKarp(node sNode,node Graph[][10000])
 int penalty(double a, double b) {
 //    cout << 100 * exp(-SQUARE((double)a - (double)b)) / (2 * SQUARE(SIGMA)) << endl;
     return (int)100 * exp( (-1 * (a - b)*(a-b)) / (2 * SIGMA * SIGMA) );
+//    return (int)10 * exp( (-1 * (a - b)*(a-b)) / (2 * SIGMA * SIGMA) );
 //    return (int) 100 * (1- SQUARE( ((a-b)/255) ));
 //    return abs(a-b);
     
