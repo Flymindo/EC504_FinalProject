@@ -17,3 +17,5 @@ print(result)
 plt.imshow(result, interpolation='nearest')
 plt.show()
 
+cv2.imwrite("segmented.png", cv2.bitwise_not(result))
+
