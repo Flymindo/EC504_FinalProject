@@ -8,6 +8,8 @@ def parser():
     ap = argparse.ArgumentParser()
     ap.add_argument('-i', '--image', required=True,
         type=str, help='path to image')
+    ap.add_argument('-o', '--output', type=str,
+        default='./means.txt', help='path to output file')
     args = ap.parse_args()
     return args
 
@@ -24,16 +26,16 @@ def draw_circle(event,x,y,flags,param):
                 cv.circle(copied,(x,y),5,(255,255,255),-1)
                 cv.circle(mask,(x,y),5,(255,255,255),-1)
             else:
-                cv.circle(copied,(x,y),5,(0,0,0),-1)
-                cv.circle(mask,(x,y),5,(0,0,0),-1)
+                cv.circle(copied,(x,y),5,(1,1,1),-1)
+                cv.circle(mask,(x,y),5,(1,1,1),-1)
     elif event == cv.EVENT_LBUTTONUP:
         drawing = False
         if (mode == True):
             cv.circle(mask,(x,y),5,(255,255,255),-1)
             cv.circle(copied,(x,y),5,(255,255,255),-1)
         else:
-            cv.circle(copied,(x,y),5,(0,0,0),-1)
-            cv.circle(mask,(x,y),5,(0,0,0),-1)
+            cv.circle(copied,(x,y),5,(1,1,1),-1)
+            cv.circle(mask,(x,y),5,(1,1,1),-1)
 
 if __name__ == "__main__":
     args = parser() # get command line arguments
@@ -45,23 +47,25 @@ if __name__ == "__main__":
     img = cv.imread(args.image)
     copied = np.copy(img)
     mask = np.zeros((img.shape[0], img.shape[1], 1), np.uint8)
-    # copied_mask = np.copy(mask)
-
-    bgdModel = np.zeros((1,65), np.float64)
-    fgdModel = np.zeros((1,65), np.float64)
 
     cv.namedWindow('image')
     cv.setMouseCallback('image',draw_circle)
+    print("press 'm' to to switch from drawing foreground to background and 'q' to quit\n")
     while(1):
         cv.imshow('mask', mask)
         cv.imshow('image', copied)
         k = cv.waitKey(1) & 0xFF
         if k == ord('m'):
             mode = not mode
+            if mode:
+                print("drawing foreground points")
+            else:
+                print("drawing background points")
         if k == 27 or k == ord('q'):
             break
     cv.destroyAllWindows()
 
+<<<<<<< HEAD
 
     mask[mask == 0] = 0
     mask[mask == 255] = 1
@@ -69,11 +73,25 @@ if __name__ == "__main__":
     mask = mask.reshape(img.shape[:2])
     print(mask.shape)
     np.savetxt("marked.txt", mask)
+=======
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY).flatten()
+    mask = mask.flatten()
 
+    bgPoints = gray[mask == 1]
+    fgPoints = gray[mask == 255]
+
+    assert len(fgPoints) > 0, "must have at least one foreground point labeled!"
+    assert len(bgPoints) > 0, "must have at least one background point labeled!"
+>>>>>>> f39b3a16c62fa3eaa37663f65d92b0960237019d
+
+    bgMean = bgPoints.mean()
+    fgMean = fgPoints.mean()
+
+    print("Background Mean: ", bgMean) 
+    print("Foreground Mean: ", fgMean)
+
+    f = open(args.output, 'w')
+    f.write("{},{}\n".format(0, bgMean))
+    f.write("{},{}".format(1, fgMean))
+    f.close()
     
-    # mask, bgdModel, fgdModel = cv.grabCut(img,mask,(50,50,450,290),bgdModel,fgdModel,25,cv.GC_INIT_WITH_MASK)
-
-    # mask = np.where((mask==2)|(mask==0),0,1).astype('uint8')
-    # img = img*mask[:,:,np.newaxis]
-    # plt.imshow(img),plt.colorbar(),plt.show()
-

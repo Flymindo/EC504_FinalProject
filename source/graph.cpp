@@ -296,7 +296,7 @@ int edmondsKarp(node sNode,node Graph[][10000])
             y =temp.prev[1];
             
             temp.wentThrough->capacity -= flow;
-//            temp.wentThrough->neigh->capacity -= flow;
+            temp.wentThrough->neigh->capacity -= flow;
 //            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->capacity <<endl;
 //            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->neigh->capacity <<endl;
             if (x == height-1 && y == width){
