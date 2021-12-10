@@ -3,10 +3,9 @@
 #============================================================
 TARGET	=  segment
 
-C_SOURCES =  source/*.cpp
-C_OBJS     = source/main.o
-MY_INCLUDES =
-LIBDIRS = include
+C_SOURCES =  main.cpp graph.cpp
+C_OBJS     = main.o graph.o
+MY_INCLUDES = 
 
 CCX = g++
 CXXFLAGS = -g -std=c++11  -Wall
