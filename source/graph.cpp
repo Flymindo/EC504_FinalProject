@@ -90,7 +90,7 @@ int edmondsKarp(node sNode,node Graph[][10000], int height, int width)
     int count;
     while(true)
     {
-        int flow = bfs(sNode,Graph);
+        int flow = bfs(sNode,Graph, height, width);
 //        cout << flow << endl;
         if (flow == 0)
         {
