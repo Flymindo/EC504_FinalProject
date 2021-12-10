@@ -5,7 +5,7 @@ TARGET	=  segment
 
 C_SOURCES =  source/*.cpp
 C_OBJS     = source/main.o
-MY_INCLUDES =
+MY_INCLUDES = source/*.h
 
 CCX = g++
 CXXFLAGS = -g -std=c++11  -Wall
