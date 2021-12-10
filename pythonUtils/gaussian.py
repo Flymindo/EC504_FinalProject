@@ -16,8 +16,8 @@ def gaussianMixture(filename):
     plt.imshow(gray, interpolation='nearest')
     plt.show()
 
-    np.savetxt('images/image.txt',gray )
-    np.savetxt('images/imageSize.txt', gray.shape, fmt='%i')
+    np.savetxt('data/image.txt',gray )
+    np.savetxt('data/imageSize.txt', gray.shape, fmt='%i')
 
     height = gray.shape[0]
     width = gray.shape[1]
@@ -40,8 +40,8 @@ def gaussianMixture(filename):
     foreground = foreground.reshape(height,width)
     background = background.reshape(height,width)
 
-    np.savetxt('images/foreground.txt',foreground)
-    np.savetxt('images/background.txt',background)
+    np.savetxt('data/foreground.txt',foreground)
+    np.savetxt('data/background.txt',background)
 
 
 

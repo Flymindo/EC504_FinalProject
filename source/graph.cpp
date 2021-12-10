@@ -103,7 +103,7 @@ int edmondsKarp(node sNode,node Graph[][10000], int height, int width)
         
     }
     
-    outFile.open("data/result.txt");
+    outFile.open("../data/result.txt");
     
     
     for (int i=0; i<height;i++){

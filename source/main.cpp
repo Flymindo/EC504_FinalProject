@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
     int height, width;
 
 
-    inFile.open("data/imageSize.txt");
+    inFile.open("../data/imageSize.txt");
     inFile>> height;
     inFile>> width;
     inFile.close();
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
 
 //    struct node Graph[height+1][width+1];
 
-    inFile.open("data/image.txt");
+    inFile.open("../data/image.txt");
     
     for (int i=0; i< height; i++){
         for (int j=0; j<width; j++){
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
     }
     
 
-    inFile.open("data/foreground.txt");
+    inFile.open("../data/foreground.txt");
 
     for (int i=0; i< height; i++){
         for (int j=0; j<width; j++){
@@ -120,7 +120,7 @@ int main(int argc, char *argv[]){
     }
     inFile.close();
 
-    inFile.open("data/background.txt");
+    inFile.open("../data/background.txt");
     
     for (int i=0; i< height; i++){
         for (int j=0; j<width; j++){
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]){
 
 
     // From Here, Min Cut Goes in
-    cout << edmondsKarp(src,Graph,height,width) << endl;
+    cout << "Max Flow = " << edmondsKarp(src,Graph,height,width) << endl;
  
     return 0;
 }
