@@ -11,13 +11,12 @@ using namespace std;
 #define SQUARE(X) X*X
 
 struct node{
-    struct arc *first; /* first arc in linked list */
-    int flow;  /* Distance estimate */
-//    struct node *P;  /* Predecessor node in shortest path */
+    struct arc *first;
+    int flow;
     int curr[2];
-    int prev[2];  /* Predecessor node in shortest path */
+    int prev[2];
     struct arc *wentThrough;
-    double pixel;  /* Position of node in heap, from 1 to Nm, where 1 is best */
+    double pixel;
 };
 
 struct arc{
@@ -42,7 +41,6 @@ int edmondsKarp(node sNode,node Graph[][10000]);
 int main(int argc, char *argv[]){
 
     ifstream inFile;
-//    ofstream outFile;
     
     double data;
     struct arc *edgeTo, *edgeFrom, test;
@@ -54,10 +52,6 @@ int main(int argc, char *argv[]){
     inFile>> width;
     inFile.close();
 
-//    int size = height*width;
-
-
-//    struct node Graph[height+1][width+1];
 
     inFile.open("image.txt");
     
@@ -156,7 +150,6 @@ int main(int argc, char *argv[]){
 
     inFile.open("background.txt");
     
-//    int count=0;
 //    //end[] = [-1,-1] == sink
     for (int i=0; i< height; i++){
         for (int j=0; j<width; j++){
@@ -173,12 +166,11 @@ int main(int argc, char *argv[]){
             edgeTo->neigh = edgeFrom;
             edgeFrom->neigh = edgeTo;
             
-//            count += (int) 100 * data;
 
         }
     }
     inFile.close();
-//    cout << count << endl;
+
     
 
 
@@ -196,8 +188,6 @@ int main(int argc, char *argv[]){
 
 int bfs(node sNode,node Graph[][10000])
 {
-//   memset(parList, -1, sizeof(parList));
-//   memset(currentPathC, 0, sizeof(currentPathC));
     queue<node> q;//declare queue vector
     q.push(Graph[height-1][width]);
 
@@ -228,33 +218,29 @@ int bfs(node sNode,node Graph[][10000])
 
     while(!q.empty())// if q is not empty
     {
-//        cout << "I'm in" << endl;
         node currNode = q.front();
         q.pop();
-//        cout <<currNode.curr[0] << "   " << currNode.curr[1] << endl;
         
         temp = currNode.first;
-//        cout << temp->capacity << endl;
+
         while(temp){
             toGo[0] = temp->end[0];
             toGo[1] = temp->end[1];
-//            cout << toGo[0] << "   " << toGo[1] << endl;
+
             C = temp->capacity;
             if (C >0){
                 if ( Graph[toGo[0]][toGo[1]].prev[0] == -1 && Graph[toGo[0]][toGo[1]].prev[1] == -1){
-//                    cout << "I'm in" << endl;
+
                     Graph[toGo[0]][toGo[1]].prev[0] =currNode.curr[0];
                     Graph[toGo[0]][toGo[1]].prev[1] =currNode.curr[1];
                     Graph[toGo[0]][toGo[1]].wentThrough = temp;
-                    
-//                        cout << Graph[toGo[0]][toGo[1]].wentThrough->capacity  << endl;
+
                     
                     maxFlow = min(C, currNode.flow);
                     Graph[toGo[0]][toGo[1]].flow = maxFlow;
-//
+
                     if(toGo[0] == height && toGo[1] == width){
-//                        cout <<currNode.curr[0] << "   " << currNode.curr[1] << endl;
-//                        cout << maxFlow << endl;
+
                         return maxFlow;
                     }
                     q.push(Graph[toGo[0]][toGo[1]]);
@@ -278,14 +264,13 @@ int edmondsKarp(node sNode,node Graph[][10000])
     while(true)
     {
         int flow = bfs(sNode,Graph);
-//        cout << flow << endl;
+
         if (flow == 0)
         {
             break;
         }
         
         maxFlow += flow;
-//        cout << maxFlow << endl;
 
         node temp = Graph[height][width];
         
@@ -296,9 +281,10 @@ int edmondsKarp(node sNode,node Graph[][10000])
             y =temp.prev[1];
             
             temp.wentThrough->capacity -= flow;
+            // I originally planned to add the flow on the opposite edge but it resulted very very long run time.
+            // Therefore, I adjusted a code to subtract the flow instead of adding it
             temp.wentThrough->neigh->capacity -= flow;
-//            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->capacity <<endl;
-//            cout << temp.curr[0] << "   " << temp.curr[1] <<  "   "<< temp.wentThrough->neigh->capacity <<endl;
+            
             if (x == height-1 && y == width){
                 
                 break;
@@ -308,67 +294,7 @@ int edmondsKarp(node sNode,node Graph[][10000])
         
     }
     
-    
-//
-//    queue<node> q;//declare queue vector
-//    q.push(Graph[height-1][width]);
-//
-//
-//    for (int i=0; i< height; i++){
-//        for (int j=0; j<width; j++){
-//            Graph[i][j].wentThrough = NULL;
-//            Graph[i][j].prev[0] = -1;
-//            Graph[i][j].prev[1] = -1;
-//            Graph[i][j].flow = 0;
-//        }
-//    }
-//
-//    Graph[height][width].wentThrough = NULL;
-//    Graph[height][width].prev[0] = -1;
-//    Graph[height][width].prev[1] = -1;
-//    Graph[height][width].flow = 0;
-//
-//    int toGo[2];
-//    arc* temp;
-//
-//    while(!q.empty())// if q is not empty
-//    {
-////        cout << "I'm in" << endl;
-//        node currNode = q.front();
-//        q.pop();
-////        cout <<currNode.curr[0] << "   " << currNode.curr[1] << endl;
-//
-//        temp = currNode.first;
-////        cout << temp->capacity << endl;
-//        while(temp){
-//            toGo[0] = temp->end[0];
-//            toGo[1] = temp->end[1];
-////            cout << toGo[0] << "   " << toGo[1] << endl;
-//            if ( Graph[toGo[0]][toGo[1]].prev[0] == -1 && Graph[toGo[0]][toGo[1]].prev[1] == -1){
-////                    cout << "I'm in" << endl;
-//                Graph[toGo[0]][toGo[1]].prev[0] =currNode.curr[0];
-//                Graph[toGo[0]][toGo[1]].prev[1] =currNode.curr[1];
-//                Graph[toGo[0]][toGo[1]].wentThrough = temp;
-//
-//
-//                if(toGo[0] == height && toGo[1] == width){
-//                    continue;
-//                }
-//                q.push(Graph[toGo[0]][toGo[1]]);
-//
-//            }
-//            temp = temp->next;
-//        }
-//    }
-    
-    
-    
-    
-    
-    
-    
     outFile.open("result.txt");
-    
     
     for (int i=0; i<height;i++){
         for (int j=0; j<width; j++){
@@ -388,10 +314,5 @@ int edmondsKarp(node sNode,node Graph[][10000])
 }
 
 int penalty(double a, double b) {
-//    cout << 100 * exp(-SQUARE((double)a - (double)b)) / (2 * SQUARE(SIGMA)) << endl;
     return (int)100 * exp( (-1 * (a - b)*(a-b)) / (2 * SIGMA * SIGMA) );
-//    return (int)10 * exp( (-1 * (a - b)*(a-b)) / (2 * SIGMA * SIGMA) );
-//    return (int) 100 * (1- SQUARE( ((a-b)/255) ));
-//    return abs(a-b);
-    
 }

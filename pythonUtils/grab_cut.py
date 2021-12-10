@@ -17,6 +17,7 @@ def draw_circle(event,x,y,flags,param):
     if event == cv.EVENT_LBUTTONDOWN:
         drawing = True
         ix,iy = x,y
+        print(ix,iy)
     elif event == cv.EVENT_MOUSEMOVE:
         if drawing == True:
             if (mode == True):
@@ -61,13 +62,13 @@ if __name__ == "__main__":
             break
     cv.destroyAllWindows()
 
+
+    mask[mask == 0] = 0
+    mask[mask == 255] = 1
+
+    mask = mask.reshape(img.shape[:2])
+    print(mask.shape)
     np.savetxt("marked.txt", mask)
-
-    # mask[mask == 0] = 0
-    # mask[mask == 255] = 1
-
-    # mask = mask.reshape(img.shape[:2])
-    # print(mask.shape)
 
     
     # mask, bgdModel, fgdModel = cv.grabCut(img,mask,(50,50,450,290),bgdModel,fgdModel,25,cv.GC_INIT_WITH_MASK)

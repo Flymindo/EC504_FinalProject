@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import cv2
  
 #image = cv2.imread('images/coins.jpg')
-image = cv2.imread('images/plane.png')
+image = cv2.imread('../images/dog.jpg')
  
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
  
@@ -28,6 +28,7 @@ segmented_data = centers[labels.flatten()]
  
 
 segmented_image = segmented_data.reshape((image.shape))
+print(np.unique(segmented_image))
  
 plt.imshow(segmented_image)
 plt.show()
