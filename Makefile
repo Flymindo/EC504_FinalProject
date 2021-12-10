@@ -5,10 +5,10 @@ TARGET	=  segment
 
 C_SOURCES =  source/*.cpp
 C_OBJS     = source/main.o
-MY_INCLUDES = source/*.h
+MY_INCLUDES = 
 
 CCX = g++
-CXXFLAGS = -g -std=c++11  -Wall
+CXXFLAGS = -g -std=c++11  -Wall -Isource
 
 #============================================================
 all: $(TARGET)
