@@ -8,6 +8,8 @@ def parser():
     ap = argparse.ArgumentParser()
     ap.add_argument('-i', '--image', required=True,
         type=str, help='path to image')
+    ap.add_argument('-o', '--output', type=str,
+        default='./means.txt', help='path to output file')
     args = ap.parse_args()
     return args
 
@@ -76,4 +78,9 @@ if __name__ == "__main__":
 
     print("Background Mean: ", bgMean) 
     print("Foreground Mean: ", fgMean)
+
+    f = open(args.output, 'w')
+    f.write("{},{}\n".format(0, bgMean))
+    f.write("{},{}".format(1, fgMean))
+    f.close()
     
