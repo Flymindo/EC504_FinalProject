@@ -9,7 +9,7 @@ def parser():
     ap.add_argument('-i', '--image', required=True,
         type=str, help='path to image')
     ap.add_argument('-o', '--output', type=str,
-        default='./means.txt', help='path to output file')
+        default='./data/means.txt', help='path to output file')
     args = ap.parse_args()
     return args
 
@@ -76,11 +76,10 @@ if __name__ == "__main__":
     bgMean = bgPoints.mean()
     fgMean = fgPoints.mean()
 
-    print("Background Mean: ", bgMean) 
+    print("Background Mean: ", bgMean)
     print("Foreground Mean: ", fgMean)
 
     f = open(args.output, 'w')
-    f.write("{},{}\n".format(0, bgMean))
-    f.write("{},{}".format(1, fgMean))
+    f.write("{} {}".format(fgMean,bgMean))
+#    f.write("{},{}".format(fgMean))
     f.close()
-    
