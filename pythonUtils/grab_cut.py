@@ -9,7 +9,7 @@ def parser():
     ap.add_argument('-i', '--image', required=True,
         type=str, help='path to image')
     ap.add_argument('-o', '--output', type=str,
-        default='./means.txt', help='path to output file')
+        default='./data/means.txt', help='path to output file')
     args = ap.parse_args()
     return args
 
@@ -19,7 +19,6 @@ def draw_circle(event,x,y,flags,param):
     if event == cv.EVENT_LBUTTONDOWN:
         drawing = True
         ix,iy = x,y
-        print(ix,iy)
     elif event == cv.EVENT_MOUSEMOVE:
         if drawing == True:
             if (mode == True):
@@ -65,15 +64,6 @@ if __name__ == "__main__":
             break
     cv.destroyAllWindows()
 
-<<<<<<< HEAD
-
-    mask[mask == 0] = 0
-    mask[mask == 255] = 1
-
-    mask = mask.reshape(img.shape[:2])
-    print(mask.shape)
-    np.savetxt("marked.txt", mask)
-=======
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY).flatten()
     mask = mask.flatten()
 
@@ -82,16 +72,14 @@ if __name__ == "__main__":
 
     assert len(fgPoints) > 0, "must have at least one foreground point labeled!"
     assert len(bgPoints) > 0, "must have at least one background point labeled!"
->>>>>>> f39b3a16c62fa3eaa37663f65d92b0960237019d
 
     bgMean = bgPoints.mean()
     fgMean = fgPoints.mean()
 
-    print("Background Mean: ", bgMean) 
+    print("Background Mean: ", bgMean)
     print("Foreground Mean: ", fgMean)
 
     f = open(args.output, 'w')
-    f.write("{},{}\n".format(0, bgMean))
-    f.write("{},{}".format(1, fgMean))
+    f.write("{} {}".format(fgMean,bgMean))
+#    f.write("{},{}".format(fgMean))
     f.close()
-    

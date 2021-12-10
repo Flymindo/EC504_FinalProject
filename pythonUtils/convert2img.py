@@ -3,17 +3,24 @@ import matplotlib.pyplot as plt
 import cv2
 from matplotlib import pyplot as plt
  
+def convert():
+#    image = cv2.imread("../images/" + filename)
 
-image = cv2.imread('images/coins.jpg')
+    # Get rid of BGR to GRAY scale conversion if image scale is already in grayscale
+#    gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    image = cv2.loadtxt("../data/image.txt")
 
-# Get rid of BGR to GRAY scale conversion if image scale is already in grayscale
-gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 
-count = 0
-label = np.loadtxt("result.txt")
+    label = np.loadtxt("result.txt")
 
-result = np.multiply(gray,label)
-print(result)
-plt.imshow(result, interpolation='nearest')
-plt.show()
+    result = np.multiply(gray,label)
 
+    plt.imshow(result, interpolation='nearest')
+    plt.show()
+
+if __name__ == '__main__':
+    try:
+        convert(file)
+        
+    except:
+        print("Error occured")

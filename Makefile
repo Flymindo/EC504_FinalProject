@@ -24,8 +24,6 @@ $(TARGET) :   $(C_OBJS)
 
 ALL_SOURCES = makeFind $(C_SOURCES) $(MY_INCLUDES)
 
-# INPUT_FILES  =  Sorted100.txt  Sorted100K.txt  Sorted1M.txt
-
 clean:
 	rm -f $(TARGET) $(C_OBJS) core *~
 
