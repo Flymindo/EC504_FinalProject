@@ -39,9 +39,9 @@ struct arc{
 
 /* function definitions */
 
-int bfs(node sNode,node Graph[][10000]);
+int bfs(node sNode,node Graph[][10000], int height, int width);
 
-int edmondsKarp(node sNode,node Graph[][10000]);
+int edmondsKarp(node sNode,node Graph[][10000], int height, int width);
 
 int penalty(double a, double b);
 
