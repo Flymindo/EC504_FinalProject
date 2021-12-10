@@ -4,7 +4,7 @@
 TARGET	=  segment
 
 C_SOURCES =  source/*.cpp
-C_OBJS     = source/main.o
+C_OBJS =
 MY_INCLUDES = 
 
 CCX = g++
