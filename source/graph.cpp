@@ -22,10 +22,6 @@ struct arc{
     int end [2];
 };
 
-int penalty(double a, double b);
-int bfs(node src,node Graph[][10000], int height, int width);
-int edmondsKarp(node sNode,node Graph[][10000], int height, int width);
-
 int bfs(node sNode,node Graph[][10000], int height, int width)
 {
     queue<node> q;//declare queue vector
