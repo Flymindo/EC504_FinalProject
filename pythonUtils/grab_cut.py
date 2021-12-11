@@ -51,6 +51,7 @@ if __name__ == "__main__":
     cv.setMouseCallback('image',draw_circle)
     print("press 'm' to to switch from drawing foreground to background and 'q' to quit\n")
     while(1):
+        cv.moveWindow('mask', 200,0)
         cv.imshow('mask', mask)
         cv.imshow('image', copied)
         k = cv.waitKey(1) & 0xFF
